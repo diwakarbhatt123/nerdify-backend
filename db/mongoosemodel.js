@@ -3,10 +3,11 @@ var exports = {
     postsSchema: function () {
         return new mongoose.Schema({
             title: String,
-            post: String,
+            content: String,
             createdOn: Date,
             updatedOn: Date,
             likes: Number,
+            views: Number,
             comments: [{
                 name: String,
                 email: String,
@@ -15,9 +16,15 @@ var exports = {
             }]
         });
     },
-    Post:function () {
+    Post: function () {
         var post = this.postsSchema();
-        post.pre('save', function(next) {
+        post.pre('save', function (next) {
+            //initialize like to 0
+            this.likes = 0;
+            //initialize views to 0
+            this.views = 0;
+            //initialize comments
+            this.comments = [];
             // get the current date
             var currentDate = new Date();
             // change the updated_at field to current date
@@ -26,7 +33,7 @@ var exports = {
             this.createdOn = currentDate;
             next();
         });
-        return mongoose.model('Post',post);
+        return mongoose.model('Post', post);
     }
 };
 module.exports = exports;
