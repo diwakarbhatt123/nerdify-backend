@@ -4,7 +4,7 @@ var postService = require('../service/postService');
 
 /* GET posts listing. */
 router.get('/:postId', function (req, res, next) {
-    postService.getPost(req,res);
+    postService.getPost(req, res);
 });
 /*Post a post :p*/
 router.post('/', function (req, res) {
@@ -18,4 +18,5 @@ router.put('/like', function (req, res) {
 router.put('/comment', function (req, res) {
     postService.addCommentToPost(req, res);
 });
+
 module.exports = router;

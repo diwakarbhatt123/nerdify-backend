@@ -8,7 +8,6 @@ var mongoose = require('mongoose');
 
 var index = require('./routes/index');
 var post = require('./routes/post');
-
 var app = express();
 
 // view engine setup

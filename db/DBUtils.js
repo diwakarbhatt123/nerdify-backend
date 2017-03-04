@@ -18,19 +18,7 @@ var exports = {
         if (_.isUndefined(this.Post)) {
             this.Post = mongooseModel.Post();
         }
-      this.Post.findOne({_id:postId},function (err,post) {
-          if (err) {
-              cb(err, null);
-          } else {
-              cb(null, post);
-          }
-      });
-    },
-    likePost: function (postId, cb) {
-        if (_.isUndefined(this.Post)) {
-            this.Post = mongooseModel.Post();
-        }
-        this.Post.findOneAndUpdate({_id:postId},{$inc:{likes:1},$set:{updatedOn:new Date()}},{new:true},function (err,post) {
+        this.Post.findOne({_id: postId}, function (err, post) {
             if (err) {
                 cb(err, null);
             } else {
@@ -38,11 +26,53 @@ var exports = {
             }
         });
     },
-    addCommentToPost:function (postId,comment,cb) {
+    getTrendingPosts: function (cb) {
         if (_.isUndefined(this.Post)) {
             this.Post = mongooseModel.Post();
         }
-        this.Post.findOneAndUpdate({_id:postId},{$push:{comments:comment},$set:{updatedOn:new Date()}},{new:true},function (err,post) {
+        this.Post.find({}).sort('-likes').exec(function (err, docs) {
+            if (err) {
+                cb(err, null);
+            } else {
+                cb(null, docs);
+            }
+        });
+    },
+    getLatestPosts: function (cb) {
+        if (_.isUndefined(this.Post)) {
+            this.Post = mongooseModel.Post();
+        }
+        this.Post.find({}).sort('-createdOn').exec(function (err, docs) {
+            if (err) {
+                cb(err, null);
+            } else {
+                cb(null, docs);
+            }
+        });
+    },
+    likePost: function (postId, cb) {
+        if (_.isUndefined(this.Post)) {
+            this.Post = mongooseModel.Post();
+        }
+        this.Post.findOneAndUpdate({_id: postId}, {
+            $inc: {likes: 1},
+            $set: {updatedOn: new Date()}
+        }, {new: true}, function (err, post) {
+            if (err) {
+                cb(err, null);
+            } else {
+                cb(null, post);
+            }
+        });
+    },
+    addCommentToPost: function (postId, comment, cb) {
+        if (_.isUndefined(this.Post)) {
+            this.Post = mongooseModel.Post();
+        }
+        this.Post.findOneAndUpdate({_id: postId}, {
+            $push: {comments: comment},
+            $set: {updatedOn: new Date()}
+        }, {new: true}, function (err, post) {
             if (err) {
                 cb(err, null);
             } else {

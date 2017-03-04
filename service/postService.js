@@ -1,7 +1,7 @@
 var DBUtils = require('../db/DBUtils');
 var _ = require('underscore');
 var exports = {
-    getPost:function (req,res) {
+    getPost: function (req, res) {
         if (_.isUndefined(req.params) || _.isEmpty(req.params)) {
             res.status(400).json({error: 'No Post Id'});
         } else {
@@ -11,7 +11,7 @@ var exports = {
             } else {
                 DBUtils.getPostById(postId, function (err, post) {
                     if (err) {
-                        res.status(500).json({error: 'Internal Server Error could not like'});
+                        res.status(500).json({error: 'Internal Server Error: Could not get post'});
                     } else {
                         res.status(200).json(post);
                     }
@@ -27,7 +27,7 @@ var exports = {
             DBUtils.savePost(post, function (err, post) {
                 if (err) {
                     console.log(err.stack, err.message);
-                    res.status(500).json({error: 'Internal Server Error could not save'});
+                    res.status(500).json({error: 'Internal Server Error: Could not save'});
                 } else {
                     res.status(200).json(post);
                 }
@@ -44,7 +44,7 @@ var exports = {
             } else {
                 DBUtils.likePost(postId, function (err, post) {
                     if (err) {
-                        res.status(500).json({error: 'Internal Server Error could not like'});
+                        res.status(500).json({error: 'Internal Server Error: Could not like'});
                     } else {
                         res.status(200).json({postId: post._id, likes: post.likes});
                     }
@@ -52,22 +52,22 @@ var exports = {
             }
         }
     },
-    addCommentToPost: function (req,res) {
+    addCommentToPost: function (req, res) {
         if (_.isUndefined(req.body) || _.isEmpty(req.body)) {
             res.status(400).json({error: 'No Post Id and comment'});
         } else {
             var postId = req.body.id;
             var comment = req.body.comment;
             if (_.isUndefined(postId) || _.isEmpty(postId) || _.isUndefined(comment) || _.isEmpty(comment)) {
-                res.status(400).json({error:'No postId or comment body'});
+                res.status(400).json({error: 'No postId or comment body'});
             } else {
-                DBUtils.addCommentToPost(postId,comment,function (err,post) {
-                   if(err){
-                       console.log(err);
-                       res.status(500).json({error:'Internal server error could not add comment'});
-                   } else {
-                       res.status(200).json({postId:post._id,comments:post.comments});
-                   }
+                DBUtils.addCommentToPost(postId, comment, function (err, post) {
+                    if (err) {
+                        console.log(err);
+                        res.status(500).json({error: 'Internal Server Error: Could not add comment'});
+                    } else {
+                        res.status(200).json({postId: post._id, comments: post.comments});
+                    }
                 });
             }
         }
