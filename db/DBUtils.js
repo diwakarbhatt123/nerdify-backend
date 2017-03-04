@@ -15,6 +15,9 @@ var exports = {
         });
     },
     getPostById: function (postId, cb) {
+        if (_.isUndefined(this.Post)) {
+            this.Post = mongooseModel.Post();
+        }
       this.Post.findOne({_id:postId},function (err,post) {
           if (err) {
               cb(err, null);
